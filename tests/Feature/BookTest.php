@@ -39,6 +39,11 @@ class BookTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function testBookControllerAtSearch()
+    {
+        $request = $this->get(route('books.search', 'book'));
+        $request->assertStatus(200);
 
+    }
 
 }
