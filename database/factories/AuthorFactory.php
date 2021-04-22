@@ -8,6 +8,6 @@ use Faker\Generator as Faker;
 //Use Faker's catchPrase method to simulate book titles in testing or seeding.
 $factory->define(Author::class, function (Faker $faker) {
     return [
-        'title' => $this->faker->name,
+        'name' => $this->faker->name,
     ];
 });
