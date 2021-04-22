@@ -9,7 +9,7 @@ class BookController extends Controller
 {
     public function index()
     {   
-        $books = Book::orderBy('id', 'desc')->take(50)->get();
+        $books = Book::orderBy('id', 'desc')->take(500)->get();
         return $books->toJson();
     }
 
@@ -28,4 +28,17 @@ class BookController extends Controller
             'title' => $book->title,
         ]);
     }
+
+    public function delete($id) {
+
+        $book = Book::find($id);
+        $bookToBeDeletedTitle = $book->title;
+        $book->delete();
+
+        return response()->json([
+            'bookToBeDeletedTitle' => $bookToBeDeletedTitle,
+        ]);
+    }
+
+
 }
