@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Book;
 
 class BookTest extends TestCase
 {
@@ -30,6 +31,14 @@ class BookTest extends TestCase
             ->assertStatus(200)
             ->assertJson($data);
     }
+
+    public function testBookControllerAtDelete()
+    {
+        $book = factory(Book::class)->create();
+        $response = $this->delete(route('books.delete', $book->id));
+        $response->assertStatus(200);
+    }
+
 
 
 }
