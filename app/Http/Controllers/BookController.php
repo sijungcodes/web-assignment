@@ -40,5 +40,13 @@ class BookController extends Controller
         ]);
     }
 
+    public function search($query){
+	 
+        $books = Book::whereRaw(
+                "MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", 
+                array($query)
+        )->get();
 
+        return $books->toJson();   
+    }
 }
