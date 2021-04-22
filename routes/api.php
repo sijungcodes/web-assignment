@@ -13,7 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
+//Books routes
 Route::get('books', 'BookController@index')->name('books.index');
 Route::get('search-books/{query}', 'BookController@search')->name('books.search');
 Route::post('books', 'BookController@store')->name('books.store');
 Route::delete('books/{id}', 'BookController@delete')->name('books.delete');
+
+//Author routes
+Route::get('authors', 'AuthorController@index')->name('authors.index');
+Route::get('search-authors/{query}', 'AuthorController@search')->name('authors.search');
+Route::post('authors', 'AuthorController@store')->name('authors.store');
+Route::post('update-authors/{id}', 'AuthorController@update')->name('authors.update');
