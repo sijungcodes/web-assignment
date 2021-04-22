@@ -14,3 +14,4 @@ use Illuminate\Http\Request;
 */
 
 Route::get('books', 'BookController@index')->name('books.index');
+Route::post('books', 'BookController@store')->name('books.store');

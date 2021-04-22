@@ -12,5 +12,20 @@ class BookController extends Controller
         $books = Book::orderBy('id', 'desc')->take(50)->get();
         return $books->toJson();
     }
-    
+
+    public function store(Request $request)
+    {
+        //If request validation fails, an exception will be thrown.
+        $validatedData = $request->validate([
+            'title' => 'required'
+        ]);
+
+        $book = new Book;
+        $book->title = $validatedData['title'];
+        $book->save();
+
+        return response()->json([
+            'title' => $book->title,
+        ]);
+    }
 }
