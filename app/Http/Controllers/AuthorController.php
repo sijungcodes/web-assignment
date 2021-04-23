@@ -12,7 +12,7 @@ class AuthorController extends Controller
         $authors = Author::orderBy('id', 'desc')->take(500)->get();
         return $authors->toJson();
     }
-    
+
     public function store(Request $request)
     {
         //If request validation fails, an exception will be thrown.
@@ -25,7 +25,27 @@ class AuthorController extends Controller
         $author->save();
 
         return response()->json([
+            'author_id' => $author-> id,
             'name' => $author->name,
         ]);
     }
+
+    public function update(Request $request)
+    {
+        //If request validation fails, an exception will be thrown.
+        $validatedData = $request->validate([
+            'author_id' => 'required',
+            'name' => 'required'
+        ]);
+
+        $author = Author::find($validatedData['author_id']);
+        $author->name = $validatedData['name'];
+        $author->save();
+
+        return response()->json([
+            'author_id' => $author-> id,
+            'name' => $author->name,
+        ]);
+    }
+
 }
