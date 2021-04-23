@@ -32,4 +32,31 @@ class AuthorTest extends TestCase
             ->assertJson($data);
     }
 
+    public function testAuthorControllerAtUpdate()
+    {
+
+        //Step 1. Create data for author and save said data
+        $data = [
+            'name' => "William Shake"
+        ];        
+
+        $savedAuthorResponse = json_decode($this->post(route('authors.store'), $data)->getContent(), true);
+
+
+        //Step 2. Update data of author created in step 1  
+        $updatedData = [
+            'author_id' => $savedAuthorResponse['author_id'],
+            'name' => "William Shakespeare"
+        ];
+
+        $updatedAuthorResponse = json_decode($this->post(route('authors.update'), $updatedData)->getContent(), true);
+
+        $isUpdated = false;
+        if( $savedAuthorResponse['name'] != $updatedAuthorResponse['name']){
+            $isUpdated = true;
+        }
+
+        $this->assertTrue($isUpdated);
+
+    }    
 }
