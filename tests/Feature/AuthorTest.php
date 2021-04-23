@@ -15,9 +15,12 @@ class AuthorTest extends TestCase
      *
      * @return void
      */
-    public function testBookControllerStatus()
+    public function testAuthorControllerStatus()
     {
         $request = $this->call('GET', 'api/authors');
         $request->assertStatus(200);
     }
+
+
+
 }
