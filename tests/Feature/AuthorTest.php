@@ -21,6 +21,15 @@ class AuthorTest extends TestCase
         $request->assertStatus(200);
     }
 
+    public function testAuthorControllerAtStore()
+    {
+        $data = [
+            'name' => "John Lock"
+        ];
 
+        $this->post(route('authors.store'), $data)
+            ->assertStatus(200)
+            ->assertJson($data);
+    }
 
 }
