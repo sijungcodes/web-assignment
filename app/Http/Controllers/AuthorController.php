@@ -48,4 +48,14 @@ class AuthorController extends Controller
         ]);
     }
 
+    public function search($query){
+	 
+        $authors = Author::whereRaw(
+                "MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", 
+                array($query)
+        )->get();
+
+        return $author->toJson();   
+    }    
+
 }
