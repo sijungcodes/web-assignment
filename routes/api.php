@@ -23,4 +23,4 @@ Route::delete('books/{id}', 'BookController@delete')->name('books.delete');
 Route::get('authors', 'AuthorController@index')->name('authors.index');
 Route::get('search-authors/{query}', 'AuthorController@search')->name('authors.search');
 Route::post('authors', 'AuthorController@store')->name('authors.store');
-Route::post('update-authors/{id}', 'AuthorController@update')->name('authors.update');
+Route::post('update-authors', 'AuthorController@update')->name('authors.update');
