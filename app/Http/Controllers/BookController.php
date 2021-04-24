@@ -24,20 +24,24 @@ class BookController extends Controller
         $book->title = $validatedData['title'];
         $book->save();
 
-        return response()->json([
-            'title' => $book->title,
-        ]);
+        $books = Book::orderBy('id', 'desc')->take(500)->get();
+        return $books->toJson();
     }
 
-    public function delete($id) {
+    public function delete(Request $request) {
 
-        $book = Book::find($id);
+        $validatedData = $request->validate([
+            'id' => 'required'
+        ]);    
+
+        $bookId = $validatedData['id'];
+
+        $book = Book::find($bookId);
         $bookToBeDeletedTitle = $book->title;
         $book->delete();
 
-        return response()->json([
-            'bookToBeDeletedTitle' => $bookToBeDeletedTitle,
-        ]);
+        $books = Book::orderBy('id', 'desc')->take(500)->get();
+        return $books->toJson();
     }
 
     public function search($query){
