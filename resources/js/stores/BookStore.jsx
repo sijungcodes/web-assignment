@@ -12,7 +12,9 @@ class BookStore extends Reflux.Store {
     }
 
     onGetInitialBookData() {
+
         var url = "http://localhost/api/books";
+
         fetch(url, { method: 'GET' })
             .then(res => res.text())
             .then(res => this.setState({
@@ -23,11 +25,26 @@ class BookStore extends Reflux.Store {
             .catch(err => err);
     }
 
-    onAddBook(){
+    onAddBook(bookTitle){
         var url = "http://localhost/api/books";
-        fetch(url, { method: 'POST' })
+
+        var requestData = {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                },
+            method: 'post',
+            credentials: "same-origin",
+            body: JSON.stringify({title: bookTitle})
+        }
+        fetch(url, requestData)
             .then(res => res.text())
-            .then(this.onGetInitialBookData())
+            .then(res => this.setState({
+                books: JSON.parse(res).map(function(item, index) {
+                    return { id: item.id, title: item.title}
+                })
+            }))
             .catch(err => err);        
     }
 }
