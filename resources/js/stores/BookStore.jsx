@@ -47,6 +47,30 @@ class BookStore extends Reflux.Store {
             }))
             .catch(err => err);        
     }
+
+    onRemoveBook(bookId){
+        var url = "http://localhost/api/books";
+        alert(bookId);
+        var requestData = {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "_method": "DELETE"
+                },
+            method: 'post',
+            credentials: "same-origin",
+            body: JSON.stringify({_method:  "DELETE",  id: bookId})
+        }
+        fetch(url, requestData)
+            .then(res => res.text())
+            .then(res => this.setState({
+                books: JSON.parse(res).map(function(item, index) {
+                    return { id: item.id, title: item.title}
+                })
+            }))
+            .catch(err => err);          
+    }
 }
 
 export default BookStore;

@@ -1,7 +1,6 @@
 
 import React from 'react';
 import Reflux from 'reflux';
-import Book from './Book';
 import BookStore from '../stores/BookStore';
 import BookActions from '../actions/BookActions';
 
@@ -13,7 +12,8 @@ class Books extends Reflux.Component {
         this.storeKeys = ['books'];
     }
     
-    componentDidMount() {
+    handleRemove(id){
+        BookActions.removeBook(id);
     }
     
     render() {
@@ -21,8 +21,9 @@ class Books extends Reflux.Component {
             <div className="">
                 {
                     this.state.books.map((book) => {
-                        book.key = book.id;
-                        return <Book {...book} />
+                        return <div key={book.id} >{book.title} 
+                        <button onClick={this.handleRemove.bind(this, book.id)}>remove !</button>
+                        <button>Add Author</button></div>
                     })
                 }
             </div>
