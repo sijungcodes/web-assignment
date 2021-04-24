@@ -1,6 +1,6 @@
 import React from 'react';
 import Reflux from 'reflux';
-import BookStore from '../stores/Bookstore'
+import BookStore from '../stores/BookStore'
 import BookActions from '../actions/BookActions'
 
 class AddBook extends Reflux.Component {
@@ -10,28 +10,27 @@ class AddBook extends Reflux.Component {
       this.stores = [BookStore];
       this.storeKeys = ['books'];
       this.handleTitleChange = this.handleTitleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleAddBook = this.handleAddBook.bind(this);
     }
   
     handleTitleChange(e) {
-      this.setState({title: e.target.value});
+        this.setState({title: e.target.value});
     }
 
-    handleSubmit(e) {
-      alert('A book was submitted: ' + this.state.title);
-      BookActions.addBook(this.state.title);
-      e.preventDefault();
+    handleAddBook(e) {      
+         e.preventDefault();
+         BookActions.addBook(this.state.title);
     }
   
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
+        <div>
           <label>
             Title:
             <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
           </label>
-          <input type="submit" value="Submit" />
-        </form>
+          <button onClick={this.handleAddBook} >Add book</button>
+        </div>
       );
     }
 }

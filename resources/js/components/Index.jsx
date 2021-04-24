@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './Header'
 import Books from './Books'
 import AddBook from './AddBook'
-import BookStore from '../stores/Bookstore'
+import BookStore from '../stores/BookStore'
 import BookActions from '../actions/BookActions'
 
 
@@ -19,6 +19,7 @@ class App extends Reflux.Component {
     }
 
     handleClick(e) {
+        e.preventDefault();
         BookActions.getInitialBookData();
     }
 
@@ -36,5 +37,5 @@ class App extends Reflux.Component {
 }
 
 if (document.getElementById('app')) {
-    ReactDOM.render( < App / > , document.getElementById('app'));
+    ReactDOM.render(  < App / > , document.getElementById('app'));
 }
