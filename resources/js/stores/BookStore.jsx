@@ -22,6 +22,14 @@ class BookStore extends Reflux.Store {
             }))
             .catch(err => err);
     }
+
+    onAddBook(){
+        var url = "http://localhost/api/books";
+        fetch(url, { method: 'POST' })
+            .then(res => res.text())
+            .then(this.onGetInitialBookData())
+            .catch(err => err);        
+    }
 }
 
 export default BookStore;
