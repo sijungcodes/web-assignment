@@ -3,7 +3,7 @@
 
     const Header = () => ( <
         nav >
-        navigation <
+        Books and Authors <
         /nav>
     )
 
