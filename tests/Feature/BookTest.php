@@ -28,14 +28,16 @@ class BookTest extends TestCase
         ];
 
         $this->post(route('books.store'), $data)
-            ->assertStatus(200)
-            ->assertJson($data);
+            ->assertStatus(200);
     }
 
     public function testBookControllerAtDelete()
     {
         $book = factory(Book::class)->create();
-        $response = $this->delete(route('books.delete', $book->id));
+        $data = [
+            'id' =>  $book->id
+        ];
+        $response = $this->delete(route('books.delete', $data));
         $response->assertStatus(200);
     }
 
