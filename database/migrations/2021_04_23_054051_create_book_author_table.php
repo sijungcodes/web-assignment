@@ -13,7 +13,7 @@ class CreateBookAuthorTable extends Migration
      */
     public function up()
     {
-        Schema::create('book_author', function (Blueprint $table) {
+        Schema::create('author_book', function (Blueprint $table) {
             $table->unique(['author_id', 'book_id']);
             $table->integer('author_id')->unsigned();
             $table->integer('book_id')->unsigned();  
@@ -27,6 +27,6 @@ class CreateBookAuthorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('book_author');
+        Schema::dropIfExists('author_book');
     }
 }
