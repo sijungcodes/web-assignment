@@ -15,23 +15,36 @@ class SearchBooks extends Reflux.Component {
     }
 
     handleSearchChange(e) {
-        this.setState({search: e.target.value});
+      this.setState({search: e.target.value});
+      if(e.target.value == ""){
+        BookActions.getInitialBookData();
+      }
     }
 
     handleSearchBooks(e) {      
         e.preventDefault();
-        BookActions.searchBooks(this.state.search);
+        if(this.state.search){
+          BookActions.searchBooks(this.state.search);
+        }else{
+          //search field is empty return default book list
+          BookActions.getInitialBookData();
+        }
+        
    }    
 
     render() {
         return (
-          <div>
-            <label>
-              Search book by title:
-              <input type="text" value={this.state.search} onChange={this.handleSearchChange} placeholder="search" />
-            </label>
-            <button onClick={this.handleSearchBooks} >Search</button>
+
+        <div className=" mw6 mw6-ns hidden ba mv4">   
+          <h1 className="f4 bg-near-black white mv0 pv2 ph3">Search</h1> 
+          <div className="pa3 bt">   
+                <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text"value={this.state.search} onChange={this.handleSearchChange} placeholder="search by title" />
+                  
+              <button className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"  onClick={this.handleSearchBooks}>Search</button>
           </div>
+        </div>
+
+
         );
       }
 };
