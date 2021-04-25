@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -17,12 +18,25 @@ class BookController extends Controller
     {
         //If request validation fails, an exception will be thrown.
         $validatedData = $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'author' => 'required'
+            
         ]);
 
+        //Add new author in athors table before create a book object
+        DB::table('authors')->insert([
+            'name' => $validatedData['author']
+        ]);
+        //Get id of just created author record
+        $authorId = DB::getPdo()->lastInsertId();;
+
         $book = new Book;
-        $book->title = $validatedData['title'];
+        $book->title = $validatedData['title'];      
         $book->save();
+
+        $book->authors()->syncWithoutDetaching(
+            $authorId
+        );        
 
         $books = Book::orderBy('id', 'desc')->take(500)->get();
         return $books->toJson();
@@ -45,11 +59,15 @@ class BookController extends Controller
     }
 
     public function search($query){
-	 
+        
+        //$query = "methodology";
+
         $books = Book::whereRaw(
-                "MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", 
+                "MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE) ", 
                 array($query)
         )->get();
+
+        //dd($books);
 
         return $books->toJson();   
     }
