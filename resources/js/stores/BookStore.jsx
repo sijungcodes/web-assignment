@@ -71,6 +71,20 @@ class BookStore extends Reflux.Store {
             }))
             .catch(err => err);          
     }
+
+    onSearchBooks(query){
+        var query = encodeURIComponent(query);
+        var url = "http://localhost/api/search-books/" + query;
+
+        fetch(url, { method: 'GET' })
+            .then(res => res.text())
+            .then(res => this.setState({
+                books: JSON.parse(res).map(function(item, index) {
+                    return { id: item.id, title: item.title}
+                })
+            }))
+            .catch(err => err);
+    }
 }
 
 export default BookStore;
