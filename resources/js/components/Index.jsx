@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './Header'
 import Books from './Books'
+import SearchBooks from './SearchBooks'
 import AddBook from './AddBook'
 import BookStore from '../stores/BookStore'
 import BookActions from '../actions/BookActions'
@@ -18,18 +19,17 @@ class App extends Reflux.Component {
         this.storeKeys = ['books'];
     }
 
-    handleClick(e) {
-        e.preventDefault();
+    componentDidMount() {
         BookActions.getInitialBookData();
-    }
+    }    
 
     render() {
         return ( <BrowserRouter >
             <div>
-            <Header / >
-            <button onClick = { this.handleClick } > Get Books < /button> 
-            <AddBook />
-            <Books / >
+                <Header / >
+                <AddBook />
+                <SearchBooks />
+                <Books / >
             </div>
             </BrowserRouter >
         )
