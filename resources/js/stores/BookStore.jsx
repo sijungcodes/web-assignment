@@ -92,14 +92,7 @@ class BookStore extends Reflux.Store {
             .then(res => this.setBooksState(res))
             .catch(err => err);
  
-        }
-
-    showRes(res){
-        console.log("res is");
-        console.log(res);
-        this.setState({authorToUpdateName: res.name, authorToUpdateId: res.author_id})
-        console.log(this.state.authorToUpdateName);
-    }        
+    }
 
     onUpdateAuthor(authorId, authorName){
 
