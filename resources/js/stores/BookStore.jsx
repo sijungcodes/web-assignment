@@ -11,14 +11,20 @@ class BookStore extends Reflux.Store {
             searchBy: 'title',
             query: '',
             books: [],
-            authorToUpdateName: null,
-            authorToUpdateId: null,
         }
+    }
+
+    getBooks(){
+        var url = this.urlBooks + '/' + this.state.sort +'/'+ this.state.searchBy  + '/' + this.state.query;
+        fetch(url, { method: 'GET' })
+            .then(res => res.text())
+            .then(res => this.setBooksState(res))
+            .catch(err => err);        
     }
 
     setBooksState(res){
         this.setState({
-            books: JSON.parse(res).map(function(item, index) {
+            books: JSON.parse(res).map(function(item) {
                 return { id: item.id, title: item.title, authorName: item.authors[0].name, authorId: item.authors[0].id }
             })
         })
@@ -44,7 +50,6 @@ class BookStore extends Reflux.Store {
 
     onToggleSort(sort){
         this.setState({sort: sort});
-        this.onSearchBooks('');
     } 
 
     onAddBook(bookTitle, bookAuthor){
@@ -86,12 +91,7 @@ class BookStore extends Reflux.Store {
     onSearchBooks(query){
         var query = encodeURIComponent(query);
         this.setState({query: query});
-        var url = this.urlBooks + '/' + this.state.sort +'/'+ this.state.searchBy  + '/' + query;
-        fetch(url, { method: 'GET' })
-            .then(res => res.text())
-            .then(res => this.setBooksState(res))
-            .catch(err => err);
- 
+        this.getBooks();
     }
 
     onUpdateAuthor(authorId, authorName){
