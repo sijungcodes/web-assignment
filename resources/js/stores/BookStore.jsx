@@ -1,5 +1,8 @@
 import Reflux from 'reflux';
 import BookActions from '../actions/BookActions';
+import xmljs from 'xml-js';
+import objectToCsv from 'object-to-csv';
+
 
 class BookStore extends Reflux.Store {
     constructor() {
@@ -29,23 +32,49 @@ class BookStore extends Reflux.Store {
             })
         })
     }
-
+    
     setAuthorName(res){
 
         //Fine in books array book object that has a matching id  
-
         function findMatchingAuthorId(book) {
             return book.authorId == res.author_id;
         }
-
         var indexOfMatch = this.state.books.findIndex(findMatchingAuthorId);
 
         //Create updated books array and set state
-
         this.state.books[indexOfMatch].authorName = res.name;
-        
         this.setState({books: this.state.books});
 
+    }
+
+    constructArrayOfObjects(keys){
+
+        return this.state.books.map(function(book){
+            var objectToBeReturned = {};
+            for(var i = 0; i < keys.length; i++){
+                if (keys[i] in book){
+                    objectToBeReturned[keys[i]] = book[keys[i]];
+                }
+            }
+            return objectToBeReturned;
+        });
+    }
+
+    async onConvertObjectToCSV(keyArray){
+        let data = this.constructArrayOfObjects(keyArray);
+        let keys = Object.keys(data[0]).map((key) => ({ key: key, as: key }));
+        var otc = new objectToCsv({ keys: keys,data: data });
+        var csv = await otc.getCSV();
+        window.location = "data:application/octet-stream," + encodeURIComponent(csv);
+        return csv;
+    }
+
+    async onConvertObjectToXML(keyArray){
+        let data = this.constructArrayOfObjects(keyArray);
+        var options = {compact: true, ignoreComment: true, spaces: 4};
+        var xml = await xmljs.js2xml(data, options);
+        window.location = "data:application/octet-stream," + encodeURIComponent(xml);
+        return  xml;
     }
 
     onToggleSort(sort){
