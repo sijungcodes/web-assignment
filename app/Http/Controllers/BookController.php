@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
 use App\Repositories\BookRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
