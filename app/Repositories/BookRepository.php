@@ -16,12 +16,10 @@ class BookRepository
      */
     public function queryTitle($query, $sort = 'asc')
     {
-        $books = Book::whereRaw(
+        return $books = Book::whereRaw(
                 "MATCH(title) AGAINST(?)", 
                 array($query)
         )->with('authors')->orderBy('title', $sort)->get();
-        
-        return $books;
     }
 
     /**
