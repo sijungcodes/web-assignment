@@ -16,7 +16,7 @@ class BookRepository
      */
     public function queryTitle($query, $sort = 'asc')
     {
-        return $books = Book::whereRaw(
+        return Book::whereRaw(
                 "MATCH(title) AGAINST(?)", 
                 array($query)
         )->with('authors')->orderBy('title', $sort)->get();
