@@ -15,10 +15,7 @@ class BookRepository
      */
     public function queryByName($query, $sort = 'asc')
     {
-        return $authors = Author::whereRaw(
-                "MATCH(title) AGAINST(?)", 
-                array($query)
-        )->with('books')->orderBy('name', $sort)->get();
+        return Author::query()->where('name', 'LIKE', "%{$searchTerm}%")->with('books')->orderBy('name', $sort)->get();
     }
 
     /**
@@ -41,7 +38,9 @@ class BookRepository
      */
     public function updateName($authorId, $authorName)
     {   
-
+        $author = Author::find($authorId);
+        $author->name = $authorName;
+        $author->save();
         return $author;
     }   
 
