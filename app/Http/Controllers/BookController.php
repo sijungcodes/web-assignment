@@ -19,7 +19,7 @@ class BookController extends Controller
     {   
         if($query == null){
             //If no query is set, return all books.
-            return $this->books->getSortedBy($sort)->toJson(); 
+            return $this->books->getSortedByTitle($sort)->toJson(); 
         }else{
             //If query is set, return books that match query search.
             return $this->books->queryTitle($query, $sort)->toJson();
@@ -34,7 +34,7 @@ class BookController extends Controller
         ]);
         $this->books->storeAndLinkToAuthor($validatedData['title'] , $validatedData['author']);
 
-        return $this->books->getSortedBy('asc')->toJson();
+        return $this->books->getSortedByTitle('asc')->toJson();
     }
 
     public function delete(Request $request)
@@ -44,6 +44,6 @@ class BookController extends Controller
         ]);   
         $this->books->delete($validatedData['id']); 
 
-        return $this->books->getSortedBy('asc')->toJson();
+        return $this->books->getSortedByTitle('asc')->toJson();
     }
 }

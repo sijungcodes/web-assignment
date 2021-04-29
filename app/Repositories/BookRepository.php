@@ -28,7 +28,7 @@ class BookRepository
      * @param  String $sort
      * @return Collection
      */
-    public function getSortedBy($sort = 'asc')
+    public function getSortedByTitle($sort = 'asc')
     {
         return Book::with('authors')->orderBy('title', $sort)->get();
     }
