@@ -3,72 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Repositories\BookRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function index()
+    protected $books;
+
+    public function __construct(BookRepository $books)
+    {
+        $this->books = $books;
+    }
+
+    public function getBooks($sort = 'asc', $queryType = 'title', $query = null)
     {   
-        $books = Book::orderBy('id', 'desc')->take(500)->get();
-        return $books->toJson();
+        if($query == null){
+            //If no query is set, return all books.
+            return $this->books->getSortedBy($sort)->toJson(); 
+        }else{
+            //If query is set, return books that match query search.
+            return $this->books->queryTitle($query, $sort)->toJson();
+        }
     }
 
     public function store(Request $request)
     {
-        //If request validation fails, an exception will be thrown.
         $validatedData = $request->validate([
             'title' => 'required',
             'author' => 'required'
-            
         ]);
+        $this->books->storeAndLinkToAuthor($validatedData['title'] , $validatedData['author']);
 
-        //Add new author in athors table before create a book object
-        DB::table('authors')->insert([
-            'name' => $validatedData['author']
-        ]);
-        //Get id of just created author record
-        $authorId = DB::getPdo()->lastInsertId();;
-
-        $book = new Book;
-        $book->title = $validatedData['title'];      
-        $book->save();
-
-        $book->authors()->syncWithoutDetaching(
-            $authorId
-        );        
-
-        $books = Book::orderBy('id', 'desc')->take(500)->get();
-        return $books->toJson();
+        return $this->books->getSortedBy('asc')->toJson();
     }
 
-    public function delete(Request $request) {
-
+    public function delete(Request $request)
+    {
         $validatedData = $request->validate([
             'id' => 'required'
-        ]);    
+        ]);   
+        $this->books->delete($validatedData['id']); 
 
-        $bookId = $validatedData['id'];
-
-        $book = Book::find($bookId);
-        $bookToBeDeletedTitle = $book->title;
-        $book->delete();
-
-        $books = Book::orderBy('id', 'desc')->take(500)->get();
-        return $books->toJson();
-    }
-
-    public function search($query){
-        
-        //$query = "methodology";
-
-        $books = Book::whereRaw(
-                "MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE) ", 
-                array($query)
-        )->get();
-
-        //dd($books);
-
-        return $books->toJson();   
+        return $this->books->getSortedBy('asc')->toJson();
     }
 }
