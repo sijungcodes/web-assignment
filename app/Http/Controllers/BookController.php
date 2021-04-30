@@ -15,14 +15,25 @@ class BookController extends Controller
         $this->books = $books;
     }
 
-    public function getBooks($sort = 'asc', $queryType = 'title', $query = null)
+    public function getBooksByTitle($sort = 'asc' , $query = null)
     {   
         if($query == null){
-            //If no query is set, return all books.
+            //If no query is set, return all books sorted by title.
             return $this->books->getSortedByTitle($sort)->toJson(); 
         }else{
             //If query is set, return books that match query search.
-            return $this->books->queryTitle($query, $sort)->toJson();
+            return $this->books->queryTitle($query)->toJson();
+        }
+    }
+
+    public function getBooksByAuthor($sort = 'asc', $query = null)
+    {   
+        if($query == null){
+            //If no query is set, return books sorted by author name.
+            return $this->books->getSortedByAuthorName($sort)->toJson(); 
+        }else{
+            //If query is set, return books that match query search.
+            return $this->books->queryBookByAuthorName($query)->toJson();
         }
     }
 
