@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 
-use App\book;
 use App\Author;
+use App\Book;
+use Illuminate\Support\Facades\DB;
 
 class BookRepository
 {
@@ -14,16 +15,29 @@ class BookRepository
      * @param  String $sort
      * @return Collection
      */
-    public function queryTitle($query, $sort = 'asc')
+    public function queryTitle($q)
     {
         return Book::whereRaw(
                 "MATCH(title) AGAINST(?)", 
-                array($query)
-        )->with('authors')->orderBy('title', $sort)->get();
+                array($q))->with('authors')->get();
     }
 
     /**
-     * Get all books.
+     * Get books that match query.
+     *
+     * @param  String $query
+     * @param  String $sort
+     * @return Collection
+     */
+    public function queryBookByAuthorName($q)
+    {
+        return Book::whereHas('authors', function ($q) {
+            $q->where('name', 'LIKE', TRIM('%q%'));
+        })->with('authors')->get();
+    }
+
+    /**
+     * Get all books sorted by title.
      *
      * @param  String $sort
      * @return Collection
@@ -32,6 +46,19 @@ class BookRepository
     {
         return Book::with('authors')->orderBy('title', $sort)->get();
     }
+
+    /**
+     * Get all books sorted by title.
+     *
+     * @param  String $sort
+     * @return Collection
+     */
+    public function getSortedByAuthorName($sort = 'asc')
+    {
+        return Book::join('author_book', 'author_book.book_id', '=', 'books.id')
+        ->join('authors', 'authors.id', '=', 'author_book.author_id')
+        ->orderBy('authors.name', $sort)->with('authors')->get();        
+    }    
 
     /**
      * Create a new book record and link book to author.
