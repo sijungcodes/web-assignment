@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom'
 import Header from './Header'
 import Books from './Books'
 import SearchBooks from './SearchBooks'
-import DownloadBar from './DownloadBar'
-import SortButtons from './SortButtons'
 import AddBook from './AddBook'
 import BookStore from '../stores/BookStore'
 import BookActions from '../actions/BookActions'
@@ -32,38 +30,36 @@ class App extends Reflux.Component {
     }
 
     UNSAFE_componentWillMount() {
-        BookActions.searchBooks('');
+        //empty string sets seatch to sort by asc or desc
+        BookActions.getBySearch('');
     }    
 
     render() {
         return (  
-            <section>
+            <section className="sans-serif">
             <Header />
-            <div className="pa3 mw9 center sans-serif">
-                <section className="cf">
-                <div className="fl w-100 w-50-ns">
-                <SearchBooks />
-                </div>
-                <div className="fl w-100 w-50-ns ">
+         
+            <div className="pa3 mw9 center">
+                <section>
 
-                </div>
-                </section>
-                <SortButtons />
-                <section className="cf">
-                    <div className="fl w-100 w-50-ns">
-                        <button className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" onClick={this.handleOpenModal}>Add book</button>
-                        <ReactModal 
-                            isOpen={this.state.showModal}
-                            contentLabel="onRequestClose Example"
-                            onRequestClose={this.handleCloseModal}>
-                            <p>Modal text!</p>
-                            <button  onClick={this.handleCloseModal}>Close Modal</button>
-                            <AddBook />
-                        </ReactModal>                           
+                </section>  
+                <div className="flex-ns  w-100">
+                    <div className="  w-50-ns w-100">
+                        <SearchBooks /> 
                     </div>
-                    <div className="fl w-100 w-50-ns"><DownloadBar /></div>
-                </section>
-
+                    <div className=" w-50-ns w-100 tr">
+                    <div className="tr">
+                    <button className="bg-black-10  dib b ph3 pv2 input-reset ba b--black grow pointer f6" onClick={this.handleOpenModal}>Add book</button>
+                    </div>
+                    <ReactModal 
+                        isOpen={this.state.showModal}
+                        ariaHideApp={false}
+                        onRequestClose={this.handleCloseModal}>
+                        <span className="fr pa2 f3 hover-bg-black hover-white" onClick={this.handleCloseModal}>✕</span>
+                        <AddBook closeModal={this.handleCloseModal} />
+                    </ReactModal>                          
+                    </div>
+                </div>                  
                 <Books />
             </div>
             </section>
