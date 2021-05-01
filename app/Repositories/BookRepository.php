@@ -15,25 +15,10 @@ class BookRepository
      * @param  String $sort
      * @return Collection
      */
-    public function queryTitle($q)
+    public function queryTitle($searchValue, $sort)
     {
-        return Book::whereRaw(
-                "MATCH(title) AGAINST(?)", 
-                array($q))->with('authors')->get();
-    }
-
-    /**
-     * Get books that match query.
-     *
-     * @param  String $query
-     * @param  String $sort
-     * @return Collection
-     */
-    public function queryBookByAuthorName($q)
-    {
-        return Book::whereHas('authors', function ($q) {
-            $q->where('name', 'LIKE', TRIM('%q%'));
-        })->with('authors')->get();
+        return Book::with('authors')->where( function ($q) use ($searchValue){
+            $q->where('title', 'LIKE', "%{$searchValue}%");})->orderBy('title', $sort)->get();
     }
 
     /**
@@ -45,7 +30,24 @@ class BookRepository
     public function getSortedByTitle($sort = 'asc')
     {
         return Book::with('authors')->orderBy('title', $sort)->get();
+    }    
+
+    /**
+     * Get books that match query.
+     *
+     * @param  String $query
+     * @param  String $sort
+     * @return Collection
+     */
+    public function queryBookByAuthorName($searchValue, $sort)
+    {
+        return Book::join('author_book', 'author_book.book_id', '=', 'books.id')
+        ->join('authors', 'authors.id', '=', 'author_book.author_id')
+        ->whereHas('authors', function ($q) use ($searchValue){
+            $q->where('name', 'LIKE', "%{$searchValue}%");
+        })->orderBy('authors.name', $sort)->with('authors')->get();
     }
+
 
     /**
      * Get all books sorted by title.
@@ -83,20 +85,6 @@ class BookRepository
 
         return $book;
     }   
-
-    /**
-     * Link book to author.
-     *
-     * @param  Book $book
-     * @param  Int $authorId
-     * @return Array
-     */
-    public function linkToAuthor($book, $authorId)
-    {    
-        return $book->authors()->syncWithoutDetaching(
-            $authorId
-        );
-    }             
 
     /**
      * Link book to author.
