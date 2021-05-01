@@ -24,7 +24,8 @@ class BookTest extends TestCase
     public function testBookControllerAtStore()
     {
         $data = [
-            'title' => "my book title"
+            'title' => 'my book title',
+            'author' => 'my name'
         ];
 
         $this->post(route('books.store'), $data)
