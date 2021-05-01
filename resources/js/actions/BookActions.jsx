@@ -1,6 +1,13 @@
 import Reflux from 'reflux';
 
-const BookActions = Reflux.createActions([ 'addBook', 'removeBook', 'searchBooks', 
-'toggleSort', 'updateAuthor', 'convertObjectToCSV', 'convertObjectToXML']);
+const BookActions = Reflux.createActions([ 
+'addBook', 
+'removeBook', 
+'setQuerySelect',
+'getBySort', 
+'getBySearch', 
+'updateAuthor', 
+'convertObjectToCSV', 
+'convertObjectToXML']);
 
 export default BookActions;
