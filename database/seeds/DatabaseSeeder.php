@@ -11,6 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $authors = factory(App\Author::class, 10)->create();
+        $books = factory(App\Book::class, 100)->create();
+        $books->each(function (App\Book $book) use ($authors) {
+            $book->authors()->syncWithoutDetaching(
+                $authors->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });      
     }
 }
