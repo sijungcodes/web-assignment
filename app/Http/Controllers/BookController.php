@@ -22,7 +22,7 @@ class BookController extends Controller
             return $this->books->getSortedByTitle($sort)->toJson(); 
         }else{
             //If query is set, return books that match query search.
-            return $this->books->queryTitle($query)->toJson();
+            return $this->books->queryTitle($query, $sort)->toJson();
         }
     }
 
@@ -33,7 +33,7 @@ class BookController extends Controller
             return $this->books->getSortedByAuthorName($sort)->toJson(); 
         }else{
             //If query is set, return books that match query search.
-            return $this->books->queryBookByAuthorName($query)->toJson();
+            return $this->books->queryBookByAuthorName($query, $sort)->toJson();
         }
     }
 
@@ -44,7 +44,6 @@ class BookController extends Controller
             'author' => 'required'
         ]);
         $this->books->storeAndLinkToAuthor($validatedData['title'] , $validatedData['author']);
-
         return $this->books->getSortedByTitle('asc')->toJson();
     }
 
