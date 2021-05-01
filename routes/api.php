@@ -20,5 +20,4 @@ Route::post('books', 'BookController@store');
 Route::delete('books', 'BookController@delete');
 
 //Author routes
-Route::post('authors', 'AuthorController@store');
-Route::post('update-authors', 'AuthorController@update');
+Route::post('authors/update', 'AuthorController@update');
